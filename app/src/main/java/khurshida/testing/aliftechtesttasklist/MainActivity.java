@@ -1,6 +1,8 @@
 package khurshida.testing.aliftechtesttasklist;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -9,6 +11,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-System.out.println("HERE");
+
         //Assign variables
         editTextTaskName = findViewById(R.id.edit_text_task_name);
         editTextTaskDeadline = findViewById(R.id.edit_text_task_deadline);
@@ -40,9 +44,7 @@ System.out.println("HERE");
         dataList=database.mainDao().getAll();
 
         linearLayoutManager=new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        mainAdapter=new MainAdapter(MainActivity.this, dataList);
-        recyclerView.setAdapter(mainAdapter);
+
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,6 +65,31 @@ System.out.println("HERE");
             }
         });
 
+        BottomNavigationView bottomNavigationView=findViewById(R.id.bottom_nav_view);
+        AllFragment allFragment=new AllFragment();
+        CompletedFragment completedFragment=new CompletedFragment();
+        InProgressFragment inProgressFragment=new InProgressFragment();
 
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id==R.id.all_frag){
+                setFragment(allFragment);
+                return true;
+            } else if (id==R.id.completed_frag){
+                setFragment(completedFragment);
+                return true;
+            }else if (id==R.id.in_progress_frag){
+                setFragment(inProgressFragment);
+                return true;
+            }
+            return false;
+        });
+        bottomNavigationView.setSelectedItemId(R.id.all_frag);
     }
+    private void setFragment(Fragment fragment){
+        FragmentTransaction fragmentTransaction=getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.flFragment, fragment);
+        fragmentTransaction.commit();
+    }
+
 }

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/all_frag"
+        android:title="All"
+        android:icon="@drawable/ic_baseline_home_24"/>
+    <item
+        android:id="@+id/completed_frag"
+        android:title="Completed"
+        android:icon="@drawable/ic_baseline_done_all_24"/>
+    <item
+        android:id="@+id/in_progress_frag"
+        android:title="In progress"
+        android:icon="@drawable/ic_baseline_alarm_24"/>
+</menu>
