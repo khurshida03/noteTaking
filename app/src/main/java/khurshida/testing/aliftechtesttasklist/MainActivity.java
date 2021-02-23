@@ -40,35 +40,33 @@ public class MainActivity extends AppCompatActivity {
         btnAdd = findViewById(R.id.btn_add);
         recyclerView=findViewById(R.id.recycle_view);
 
+        BottomNavigationView bottomNavigationView=findViewById(R.id.bottom_nav_view);
+        AllFragment allFragment=new AllFragment();
+        CompletedFragment completedFragment=new CompletedFragment();
+        InProgressFragment inProgressFragment=new InProgressFragment();
+
         database=RoomDB.getInstance(this);
         dataList=database.mainDao().getAll();
 
         linearLayoutManager=new LinearLayoutManager(this);
 
-
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String sTaskName = editTextTaskName.getText().toString().trim();
-                String sTaskDeadline = editTextTaskDeadline.getText().toString().trim();
-                if (!sTaskName.equals("")&&!sTaskDeadline.equals("")){
-                    MainData data = new MainData(sTaskName,sTaskDeadline);
-                    data.setTaskName(sTaskName);
-                    data.setTaskDeadline(sTaskDeadline);
-                    database.mainDao().insert(data);
-                    editTextTaskName.setText("");
-                    editTextTaskDeadline.setText("");
-                    dataList.clear();
-                    dataList.addAll(database.mainDao().getAll());
-                    mainAdapter.notifyDataSetChanged();
-                }
+        btnAdd.setOnClickListener(view -> {
+            String sTaskName = editTextTaskName.getText().toString().trim();
+            String sTaskDeadline = editTextTaskDeadline.getText().toString().trim();
+            if (!sTaskName.equals("")&&!sTaskDeadline.equals("")){
+                MainData data = new MainData(sTaskName,sTaskDeadline);
+                data.setTaskName(sTaskName);
+                data.setTaskDeadline(sTaskDeadline);
+                database.mainDao().insert(data);
+                editTextTaskName.setText("");
+                editTextTaskDeadline.setText("");
+                dataList.clear();
+                dataList.addAll(database.mainDao().getAll());
+                allFragment.updateListView();
             }
         });
 
-        BottomNavigationView bottomNavigationView=findViewById(R.id.bottom_nav_view);
-        AllFragment allFragment=new AllFragment();
-        CompletedFragment completedFragment=new CompletedFragment();
-        InProgressFragment inProgressFragment=new InProgressFragment();
+
 
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             int id = item.getItemId();

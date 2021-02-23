@@ -42,43 +42,40 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         database=RoomDB.getInstance(context);
         holder.textViewTaskDeadline.setText(data.getTaskDeadline());
         holder.textViewTaskName.setText(data.getTaskName());
-        holder.btnEditTask.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                MainData d = dataList.get(holder.getAdapterPosition());
-                int sID=d.getID();
-                String sTaskName=d.getTaskName();
-                String sTaskDeadline=d.getTaskDeadline();
-                Dialog dialog=new Dialog(context);
-                dialog.setContentView(R.layout.dialog_update);
+        holder.btnEditTask.setOnClickListener(v -> {
+            MainData d = dataList.get(holder.getAdapterPosition());
+            int sID=d.getID();
+            String sTaskName=d.getTaskName();
+            String sTaskDeadline=d.getTaskDeadline();
+            Dialog dialog=new Dialog(context);
+            dialog.setContentView(R.layout.dialog_update);
 
-                int width= WindowManager.LayoutParams.MATCH_PARENT;
-                int height=WindowManager.LayoutParams.WRAP_CONTENT;
+            int width= WindowManager.LayoutParams.MATCH_PARENT;
+            int height=WindowManager.LayoutParams.WRAP_CONTENT;
 
-                dialog.getWindow().setLayout(width,height);
-                dialog.show();
+            dialog.getWindow().setLayout(width,height);
+            dialog.show();
 
-                EditText editTextTaskName=dialog.findViewById(R.id.edit_text_task_name);
-                EditText editTextTaskDeadline=dialog.findViewById(R.id.edit_text_task_deadline);
-                Button btnUpdate = dialog.findViewById(R.id.btnUpdate);
+            EditText editTextTaskName=dialog.findViewById(R.id.editTextName);
+            EditText editTextTaskDeadline=dialog.findViewById(R.id.editTextDeadline);
+            Button btnUpdate = dialog.findViewById(R.id.btnUpdate);
 
-                editTextTaskDeadline.setText(sTaskDeadline);
-                editTextTaskName.setText(sTaskName);
+            editTextTaskDeadline.setText(sTaskDeadline);
+            editTextTaskName.setText(sTaskName);
 
-                btnUpdate.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialog.dismiss();
-                        String uTextTaskName=editTextTaskName.getText().toString().trim();
-                        String uTextTaskDeadline=editTextTaskDeadline.getText().toString().trim();
-                        database.mainDao().update(sID,uTextTaskName,uTextTaskDeadline);
-                        dataList.clear();
-                        dataList.addAll(database.mainDao().getAll());
-                        notifyDataSetChanged();
-                    }
-                });
+            btnUpdate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                    String uTextTaskName=editTextTaskName.getText().toString().trim();
+                    String uTextTaskDeadline=editTextTaskDeadline.getText().toString().trim();
+                    database.mainDao().update(sID,uTextTaskName,uTextTaskDeadline);
+                    dataList.clear();
+                    dataList.addAll(database.mainDao().getAll());
+                    notifyDataSetChanged();
+                }
+            });
 
-            }
         });
         holder.btnDeleteTask.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,6 +84,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
                 database.mainDao().delete(d);
                 int position = holder.getAdapterPosition();
                 dataList.remove(position);
+                notifyItemRemoved(position);
                 notifyItemRangeChanged(position,dataList.size());
             }
         });

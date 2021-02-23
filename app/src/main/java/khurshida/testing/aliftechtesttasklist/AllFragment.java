@@ -53,4 +53,9 @@ public class AllFragment extends Fragment {
         dataList.addAll(database.mainDao().getAll());
 
     }
+    public void updateListView(){
+        dataList.clear();
+        dataList.addAll(database.mainDao().getAll());
+        mainAdapter.notifyDataSetChanged();
+    }
 }
